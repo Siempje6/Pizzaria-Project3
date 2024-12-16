@@ -1,0 +1,65 @@
+﻿<UserControl x:Class="Project3.View.RouteView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:Project3.ViewModel"
+             xmlns:view="clr-namespace:Project3.View"
+             mc:Ignorable="d">
+
+    <d:UserControl.DataContext>
+        <vm:RouteViewModel/>
+    </d:UserControl.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Vertical" Margin="10">
+            <TextBlock Text="Titel"/>
+            <TextBox Text="{Binding Route.Titel, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+
+            <TextBlock Text="Kilometer"/>
+            <TextBox Text="{Binding Route.Kilometer, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+
+            <TextBlock Text="Proviand"/>
+            <TextBox Text="{Binding Route.Proviand, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+
+            <TextBlock Text="Bedrag Proviand"/>
+            <TextBox Text="{Binding Route.BedragProviand, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+
+            <TextBlock Text="Startdatum"/>
+            <TextBox Text="{Binding Route.StartDatum, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Add Route" Command="{Binding AddTeamCommand}" Margin="0,0,5,0"/>
+                <Button Content="Update Route" Command="{Binding UpdateTeamCommand}" Margin="5,0,0,0"/>
+            </StackPanel>
+        </StackPanel>
+
+        <DataGrid ItemsSource="{Binding FietsRoutes}" 
+            SelectedItem="{Binding SelectedRoute}"
+            AutoGenerateColumns="False"
+                  Grid.Row="1"
+                  Margin="10">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Titel" Binding="{Binding Titel}" />
+                <DataGridTextColumn Header="Kilometer" Binding="{Binding Kilometer}" />
+                <DataGridTextColumn Header="Proviand" Binding="{Binding Proviand}" />
+                <DataGridTextColumn Header="Bedrag Proviand" Binding="{Binding BedragProviand}" />
+                <DataGridTextColumn Header="Startdatum" Binding="{Binding StartDatum}" />
+                <DataGridTemplateColumn Header="Actions">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Delete" 
+                                    Command="{Binding DataContext.DeleteTeamCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                    CommandParameter="{Binding}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

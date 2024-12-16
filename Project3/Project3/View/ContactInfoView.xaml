@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="Project3.View.ContactInfoView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:Project3.ViewModel"
+             xmlns:view="clr-namespace:Project3.View"
+             mc:Ignorable="d">
+    <d:UserControl.DataContext>
+        <vm:ContactInfoViewModel/>
+    </d:UserControl.DataContext>
+    
+    <StackPanel>
+        <TextBlock Text="Naam:" FontWeight="Bold" />
+        <TextBlock Text="{Binding Naam}" Margin="0,0,0,10"/>
+
+        <TextBlock Text="Telefoon:" FontWeight="Bold" />
+        <TextBlock Text="{Binding Telefoon}" Margin="0,0,0,10"/>
+
+        <TextBlock Text="Email:" FontWeight="Bold" />
+        <TextBlock Text="{Binding Email}" Margin="0,0,0,10"/>
+    </StackPanel>
+</UserControl>
