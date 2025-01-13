@@ -9,7 +9,14 @@ class Ingrediënt extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['naam', 'prijs'];
+    protected $table = 'ingrediënten';
+    protected $primaryKey = 'id';
+
+    public $timestamps = true;
+
+    protected $fillable = [
+        'naam',
+    ];
 
     public function pizzas()
     {
