@@ -18,22 +18,18 @@
 
     <h2 class="text-2xl font-bold mb-4">Beschikbare Pizza's</h2>
 
-    <!-- Pizza's mooi presenteren in een grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         @foreach($pizzas as $pizza)
             <div class="bg-white rounded-lg shadow-lg p-4">
-                <!-- Pizza naam -->
+               
                 <h3 class="text-xl font-bold text-center mb-2">{{ $pizza->naam }}</h3>
 
-                <!-- Pizza afbeelding -->
                 <div class="flex justify-center mb-4">
                     <img src="{{ $pizza->afbeelding }}" alt="{{ $pizza->naam }}" class="w-32 h-32 object-cover rounded-full">
                 </div>
 
-                <!-- Pizza prijs -->
                 <p class="text-center text-lg font-semibold mb-4">€{{ number_format($pizza->prijs, 2) }}</p>
 
-                <!-- Acties -->
                 <div class="flex justify-around">
                     <a href="{{ route('pizzamedewerker.edit', $pizza->id) }}" class="bg-yellow-500 hover:bg-yellow-700 text-white px-4 py-2 rounded">Bewerken</a>
                     <form action="{{ route('pizzamedewerker.destroy', $pizza->id) }}" method="POST" class="inline">
