@@ -35,4 +35,20 @@ class PizzaController extends Controller
         return redirect()->route('pizzas.index')->with('success', 'Pizza toegevoegd aan winkelwagen!');
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
 }

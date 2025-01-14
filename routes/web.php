@@ -40,3 +40,5 @@ Route::get('/test-cart', function () {
     session()->put('cart', $cart);
     return redirect()->route('cart.view');
 });
+
+Route::resource('pizzas', PizzaController::class);
