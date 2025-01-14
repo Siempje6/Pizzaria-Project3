@@ -18,7 +18,7 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
             @foreach($pizzas as $pizza)
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden align-content: center;">
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
                     <img src="{{ $pizza->afbeelding }}" alt="{{ $pizza->naam }}" class="w-64 h-64 object-cover">
                     
                     <div class="p-4 text-center">
@@ -29,12 +29,7 @@
                     <form action="/add-to-cart" method="POST" class="p-4 w-full flex items-center justify-center gap-4">
                         @csrf
                         <input type="hidden" name="pizza_id" value="{{ $pizza->id }}">
-                        
-                        <input type="number" name="aantal" value="1" min="1" class="w-16 border py-2 border-gray-300 rounded text-center focus:outline-none focus:ring-2 focus:ring-blue-500">
-
-                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                            Voeg toe aan winkelwagen
-                        </button>
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Voeg toe aan winkelwagen</button>
                     </form>
                 </div>
             @endforeach
