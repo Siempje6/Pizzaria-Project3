@@ -30,6 +30,7 @@
 
                 <p class="text-center text-lg font-semibold mb-4">€{{ number_format($pizza->prijs, 2) }}</p>
 
+
                 <div class="flex justify-around">
                     <a href="{{ route('pizzamedewerker.edit', $pizza->id) }}" class="bg-yellow-500 hover:bg-yellow-700 text-white px-4 py-2 rounded">Bewerken</a>
                     <form action="{{ route('pizzamedewerker.destroy', $pizza->id) }}" method="POST" class="inline">
