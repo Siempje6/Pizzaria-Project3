@@ -46,20 +46,49 @@ class CartController extends Controller
     }
 
     public function removeFromCart(Request $request)
-{
-    $cart = session()->get('cart', []);
-
-    // Verwijder het item
-    foreach ($cart as $key => $item) {
-        if ($item['pizza']->id == $request->pizza_id) {
-            unset($cart[$key]);
-            break;
+    {
+        $cart = session()->get('cart', []);
+    
+        // Verwijder het item
+        foreach ($cart as $key => $item) {
+            if ($item['pizza']->id == $request->pizza_id) {
+                unset($cart[$key]);
+                break;
+            }
         }
+    
+        // Sla de geüpdatete cart op
+        session()->put('cart', $cart);
+    
+        return redirect()->route('cart.view');
     }
+    
+    public function updateCart(Request $request)
+    {
+        $cart = session()->get('cart', []);
 
-    // Sla de geüpdatete cart op
-    session()->put('cart', $cart);
+        foreach ($cart as $key => &$item) {
+            // Haal de actie (increase of decrease) op
+            $action = $request->input("action_{$item['pizza']->id}");
 
-    return redirect()->route('cart.view');
-}
+            // Verhoog of verlaag de hoeveelheid op basis van de actie
+            if ($action == 'increase') {
+                $item['quantity'] += 1; // Verhoog de hoeveelheid met 1
+            } elseif ($action == 'decrease' && $item['quantity'] > 1) {
+                $item['quantity'] -= 1; // Verlaag de hoeveelheid met 1, maar niet onder 1
+            } elseif ($request->has("quantity_{$item['pizza']->id}")) {
+                // Als de gebruiker een specifieke hoeveelheid heeft ingevoerd, werk die bij
+                $newQuantity = $request->input("quantity_{$item['pizza']->id}");
+
+                if ($newQuantity && $newQuantity > 0) {
+                    $item['quantity'] = $newQuantity; // Werk de hoeveelheid bij
+                }
+            }
+        }
+
+        // Sla de geüpdatete winkelwagen op
+        session()->put('cart', $cart);
+
+        return redirect()->route('cart.view')->with('success', 'Winkelwagen bijgewerkt!');
+    }
 }

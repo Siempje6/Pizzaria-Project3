@@ -10,7 +10,23 @@
 
     <header class="bg-gray-800 text-white p-4 flex justify-between items-center">
         <h1 class="text-3xl font-bold">Stonks Pizza</h1>
-        <a href="/winkelwagen" class="text-lg">Winkelwagen 🛒</a>
+
+        <nav class="flex items-center gap-4">
+            <a href="/winkelwagen" class="text-lg">Winkelwagen 🛒</a>
+
+            @guest
+                <a href="{{ route('login') }}" class="text-lg">Inloggen</a>
+                <a href="{{ route('register') }}" class="text-lg">Registreren</a>
+            @endguest
+
+            @auth
+                <a href="{{ route('dashboard') }}" class="text-lg">Mijn Account</a>
+                <form method="POST" action="{{ route('logout') }}" class="inline">
+                    @csrf
+                    <button type="submit" class="text-lg">Uitloggen</button>
+                </form>
+            @endauth
+        </nav>
     </header>
 
     <div class="container mx-auto p-6">
@@ -26,18 +42,18 @@
                         <p class="text-lg text-gray-500">&euro;{{ number_format($pizza->prijs, 2) }}</p>
                     </div>
 
-                    <form action="/add-to-cart" method="POST" class="p-4 w-full flex items-center justify-center gap-4">
-                        @csrf
-                        <input type="hidden" name="pizza_id" value="{{ $pizza->id }}">
-                        
-                        <!-- Invoerveld voor aantal -->
-                        <input type="number" name="aantal" value="1" min="1" class="w-16 border py-2 border-gray-300 rounded text-center focus:outline-none focus:ring-2 focus:ring-blue-500">
-
-                        <!-- Knop toevoegen -->
-                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                            Voeg toe aan winkelwagen
-                        </button>
-                    </form>
+                    @auth
+                        <form action="/add-to-cart" method="POST" class="p-4 w-full flex items-center justify-center gap-4">
+                            @csrf
+                            <input type="hidden" name="pizza_id" value="{{ $pizza->id }}">
+                            <input type="number" name="aantal" value="1" min="1" class="w-16 border py-2 border-gray-300 rounded text-center focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                                Voeg toe aan winkelwagen
+                            </button>
+                        </form>
+                    @else
+                        <p class="p-4 text-red-500">Log in om pizza's toe te voegen aan de winkelwagen.</p>
+                    @endauth
                 </div>
             @endforeach
         </div>
