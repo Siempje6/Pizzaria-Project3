@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pizza;
+use App\Models\Ingrediënt;
 use Illuminate\Http\Request;
 
 class MakePizzaController extends Controller
@@ -12,8 +13,9 @@ class MakePizzaController extends Controller
      */
     public function index()
     {
+        $ingredients = Ingrediënt::all();
         $pizzas = Pizza::all(); 
-        return view('MedewerkerPizza.PizzaOverzicht', compact('pizzas')); 
+        return view('MedewerkerPizza.PizzaOverzicht', compact('pizzas', 'ingredients')); 
     }
 
     /**
@@ -21,7 +23,8 @@ class MakePizzaController extends Controller
      */
     public function create()
     {
-        return view('MedewerkerPizza.PizzaAdd');
+        $ingredients = Ingrediënt::all();
+        return view('MedewerkerPizza.PizzaAdd', compact('ingredients'));
     }
 
     /**
@@ -33,13 +36,19 @@ class MakePizzaController extends Controller
             'naam' => 'required|string|max:255',
             'prijs' => 'required|numeric',
             'afbeelding' => 'nullable|string|max:255',
+            'ingredients' => 'nullable|array',
+            'ingredients.*' => 'exists:ingrediënts,id', 
         ]);
 
-        Pizza::create([
+        $pizza = Pizza::create([
             'naam' => $request->naam,
             'prijs' => $request->prijs,
-            'afbeelding' => $request->afbeelding, 
+            'afbeelding' => $request->afbeelding,
         ]);
+
+        if ($request->has('ingredients')) {
+            $pizza->ingredients()->attach($request->ingredients);
+        }
 
         return redirect()->route('pizzamedewerker.index')->with('success', 'Pizza toegevoegd!');
     }
@@ -49,8 +58,11 @@ class MakePizzaController extends Controller
      */
     public function edit($id)
     {
-        $pizza = Pizza::findOrFail($id);
-        return view('MedewerkerPizza.PizzaEdit', compact('pizza'));
+        $pizza = Pizza::with('ingredients')->findOrFail($id);
+
+        $ingredients = Ingrediënt::all();
+
+        return view('MedewerkerPizza.edit', compact('pizza', 'ingredients'));
     }
 
     /**
@@ -85,5 +97,12 @@ class MakePizzaController extends Controller
         $pizza->delete();
 
         return redirect()->route('pizzas.index')->with('success', 'Pizza succesvol verwijderd!');
+    }
+    public function destroyIngredient($pizzaId, $ingredientId)
+    {
+        $pizza = Pizza::findOrFail($pizzaId);
+        $pizza->ingredients()->detach($ingredientId);
+
+        return redirect()->route('pizzamedewerker.index')->with('success', 'Ingrediënt verwijderd!');
     }
 }

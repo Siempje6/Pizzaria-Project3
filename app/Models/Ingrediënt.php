@@ -9,17 +9,17 @@ class Ingrediënt extends Model
 {
     use HasFactory;
 
-    protected $table = 'ingrediënten';
+    protected $table = 'ingrediënts';
     protected $primaryKey = 'id';
-
     public $timestamps = true;
 
     protected $fillable = [
         'naam',
+        'prijs',
     ];
 
     public function pizzas()
     {
-        return $this->belongsToMany(Pizza::class, 'pizza_ingrediënt');
+        return $this->belongsToMany(Pizza::class, 'pizza_ingredient');
     }
 }
