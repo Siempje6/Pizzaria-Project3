@@ -36,7 +36,7 @@
             @foreach($pizzas as $pizza)
                 <div class="bg-white rounded-lg shadow-lg overflow-hidden">
                     <img src="{{ $pizza->afbeelding }}" alt="{{ $pizza->naam }}" class="w-64 h-64 object-cover">
-                    
+                   
                     <div class="p-4 text-center">
                         <h3 class="text-xl font-semibold">{{ $pizza->naam }}</h3>
                         <p class="text-lg text-gray-500">&euro;{{ number_format($pizza->prijs, 2) }}</p>
@@ -45,7 +45,7 @@
                     <form action="/add-to-cart" method="POST" class="p-4 w-full flex items-center justify-center gap-4">
                         @csrf
                         <input type="hidden" name="pizza_id" value="{{ $pizza->id }}">
-                        
+                       
                         <!-- Invoerveld voor aantal -->
                         <input type="number" name="aantal" value="1" min="1" class="w-16 border py-2 border-gray-300 rounded text-center focus:outline-none focus:ring-2 focus:ring-blue-500">
 

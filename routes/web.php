@@ -62,15 +62,7 @@ use App\Http\Controllers\CheckoutController;
 
 Route::middleware(['auth'])->get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-// Voeg deze regel toe aan je web.php bestand
-Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
-
-use App\Http\Controllers\OrderController;
-
-Route::get('/checkout', [OrderController::class, 'showCheckout'])->name('checkout')->middleware('auth');
-
-Route::post('/checkout', [OrderController::class, 'processCheckout'])->name('checkout.process')->middleware('auth');
-
-Route::get('/order/complete', function () {
-    return view('order.complete');
-})->name('order.complete');
+Route::middleware('auth')->group(function() {
+    Route::get('/checkout', [CheckoutController::class, 'showCheckout'])->name('checkout');
+    Route::post('/checkout', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
+});
