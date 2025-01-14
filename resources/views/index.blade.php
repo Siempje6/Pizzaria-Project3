@@ -18,7 +18,7 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
             @foreach($pizzas as $pizza)
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden align-content: center;">
                     <img src="{{ $pizza->afbeelding }}" alt="{{ $pizza->naam }}" class="w-64 h-64 object-cover">
                     
                     <div class="p-4">
