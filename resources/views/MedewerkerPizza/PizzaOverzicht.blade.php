@@ -7,11 +7,30 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100">
+    <header class="bg-gray-800 text-white p-4 flex justify-between items-center">
+                <a href="{{ route('pizzas.index') }}"><h1 class="text-3xl font-bold">Stonks Pizza</h1></a>
 
-<div class="container mx-auto p-6">
+                <nav class="flex items-center gap-4">
+                    <a href="/winkelwagen" class="text-lg">Winkelwagen 🛒</a>
+
+                    @guest
+                        <a href="{{ route('login') }}" class="text-lg">Inloggen</a>
+                        <a href="{{ route('register') }}" class="text-lg">Registreren</a>
+                    @endguest
+
+                    @auth
+                        <a href="{{ route('dashboard') }}" class="text-lg">Mijn Account</a>
+                        <form method="POST" action="{{ route('logout') }}" class="inline">
+                            @csrf
+                            <button type="submit" class="text-lg">Uitloggen</button>
+                        </form>
+                    @endauth
+                </nav>
+    </header>
+
+    <div class="container mx-auto p-6">
     <h1 class="text-3xl font-bold mb-6 text-center">Pizza Overzicht</h1>
 
-    <!-- Knop verplaatst naar rechts -->
     <div class="flex justify-end mb-4">
         <a href="{{ route('pizzamedewerker.add') }}" class="bg-blue-500 hover:bg-blue-700 text-white px-6 py-2 rounded">Nieuwe Pizza Toevoegen</a>
     </div>
@@ -30,7 +49,16 @@
 
                 <p class="text-center text-lg font-semibold mb-4">€{{ number_format($pizza->prijs, 2) }}</p>
 
-
+                <tr>
+                    <h3 class="text-xl font-bold text-center mb-2">Ingredienten:</h3>
+                    <td>
+                        @foreach($pizza->ingredients as $ingredient)
+                            - {{ $ingredient->naam }}<br>
+                        @endforeach
+                    </td>
+                    <br>
+                </tr>
+                
                 <div class="flex justify-around">
                     <a href="{{ route('pizzamedewerker.edit', $pizza->id) }}" class="bg-yellow-500 hover:bg-yellow-700 text-white px-4 py-2 rounded">Bewerken</a>
                     <form action="{{ route('pizzamedewerker.destroy', $pizza->id) }}" method="POST" class="inline">

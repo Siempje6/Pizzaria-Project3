@@ -7,8 +7,28 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100">
+    <header class="bg-gray-800 text-white p-4 flex justify-between items-center">
+            <a href="{{ route('pizzas.index') }}"><h1 class="text-3xl font-bold">Stonks Pizza</h1></a>
 
-<div class="container mx-auto p-6">
+                <nav class="flex items-center gap-4">
+                    <a href="/winkelwagen" class="text-lg">Winkelwagen 🛒</a>
+
+                    @guest
+                        <a href="{{ route('login') }}" class="text-lg">Inloggen</a>
+                        <a href="{{ route('register') }}" class="text-lg">Registreren</a>
+                    @endguest
+
+                    @auth
+                        <a href="{{ route('dashboard') }}" class="text-lg">Mijn Account</a>
+                        <form method="POST" action="{{ route('logout') }}" class="inline">
+                            @csrf
+                            <button type="submit" class="text-lg">Uitloggen</button>
+                        </form>
+                    @endauth
+                </nav>
+    </header>
+
+    <div class="container mx-auto p-6">
     <h1 class="text-3xl font-bold mb-6 text-center">Pizza Bewerken</h1>
 
     <form action="{{ route('pizzamedewerker.update', $pizza->id) }}" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-6">
@@ -27,12 +47,10 @@
             <input type="text" name="afbeelding" id="afbeelding" value="{{ $pizza->afbeelding }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight">
         </div>
         <div class="mb-4">
-            <label for="ingredients">Ingrediënten</label>
-            <select name="ingredients[]" multiple>
+            <label for="ingredients" class="block text-gray-700 font-bold mb-2">Ingrediënten:</label>
+            <select name="ingredients[]" id="ingredients" required multiple class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight">
                 @foreach($ingredients as $ingredient)
-                    <option value="{{ $ingredient->id }}" 
-                        @if($pizza->ingredients->contains($ingredient->id)) selected @endif>
-                        {{ $ingredient->naam }}
+                    <option value="{{ $ingredient->id }}"> {{ $ingredient->naam }} - € {{ $ingredient->prijs }}
                     </option>
                 @endforeach
             </select>

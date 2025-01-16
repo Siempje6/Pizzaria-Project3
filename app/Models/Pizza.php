@@ -21,7 +21,7 @@ class Pizza extends Model
 
     public function ingredients()
     {
-        return $this->belongsToMany(Ingrediënt::class, 'pizza_ingredient');
+        return $this->belongsToMany(Ingrediënt::class, 'pizza_ingrediënt');
     }
 
     public function bestelregels()

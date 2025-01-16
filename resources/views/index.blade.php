@@ -9,7 +9,7 @@
 <body class="bg-gray-100">
 
     <header class="bg-gray-800 text-white p-4 flex justify-between items-center">
-        <h1 class="text-3xl font-bold">Stonks Pizza</h1>
+        <a href="{{ route('pizzas.index') }}"><h1 class="text-3xl font-bold">Stonks Pizza</h1></a>
 
         <nav class="flex items-center gap-4">
             <a href="/winkelwagen" class="text-lg">Winkelwagen 🛒</a>

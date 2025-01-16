@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Pizza;
 use App\Models\Ingrediënt;
 use Illuminate\Http\Request;
+use IntlChar;
 
 class MakePizzaController extends Controller
 {
@@ -23,8 +24,9 @@ class MakePizzaController extends Controller
      */
     public function create()
     {
+        $pizzas = Pizza::all(); 
         $ingredients = Ingrediënt::all();
-        return view('MedewerkerPizza.PizzaAdd', compact('ingredients'));
+        return view('MedewerkerPizza.PizzaAdd', compact('pizzas' , 'ingredients'));
     }
 
     /**
@@ -58,11 +60,10 @@ class MakePizzaController extends Controller
      */
     public function edit($id)
     {
-        $pizza = Pizza::with('ingredients')->findOrFail($id);
+        $pizza = Pizza::with('ingredients')->findOrFail($id); 
+        $ingredients = Ingrediënt::all(); 
 
-        $ingredients = Ingrediënt::all();
-
-        return view('MedewerkerPizza.edit', compact('pizza', 'ingredients'));
+        return view('MedewerkerPizza.PizzaEdit', compact('pizza', 'ingredients'));
     }
 
     /**
@@ -73,7 +74,9 @@ class MakePizzaController extends Controller
     $request->validate([
         'naam' => 'required|string|max:255',
         'prijs' => 'required|numeric|min:0',
-        'afbeelding' => 'nullable|string|url',
+        'afbeelding' => 'nullable|string|max:255', 
+        'ingredients' => 'nullable|array', 
+        'ingredients.*' => 'exists:ingredients,id', 
     ]);
 
     $pizza = Pizza::findOrFail($id);
@@ -84,7 +87,13 @@ class MakePizzaController extends Controller
         'afbeelding' => $request->afbeelding,
     ]);
 
-    return redirect()->route('pizzamedewerker.index')->with('success', 'Pizza succesvol bijgewerkt!');
+    if ($request->has('ingredients')) {
+        $pizza->ingredients()->sync($request->ingredients);
+    } else {
+        $pizza->ingredients()->detach();
+    }
+
+    return redirect()->route('MedewerkerPizza.PizzaOverzicht')->with('success', 'Pizza succesvol bijgewerkt!');
 }
 
 
@@ -96,7 +105,7 @@ class MakePizzaController extends Controller
         $pizza = Pizza::findOrFail($id);
         $pizza->delete();
 
-        return redirect()->route('pizzas.index')->with('success', 'Pizza succesvol verwijderd!');
+        return redirect()->route('pizzamedewerker.index')->with('success', 'Pizza succesvol verwijderd!');
     }
     public function destroyIngredient($pizzaId, $ingredientId)
     {
