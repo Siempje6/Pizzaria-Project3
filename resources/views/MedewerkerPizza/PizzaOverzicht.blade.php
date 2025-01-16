@@ -13,6 +13,9 @@
                 <nav class="flex items-center gap-4">
                     <a href="/winkelwagen" class="text-lg">Winkelwagen 🛒</a>
 
+                    <a href="{{ route('pizzamedewerker.index') }}" class="text-lg px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-md">Pizza's Bewerken</a>
+                    <a href="{{ route('ingredienten.index') }}" class="text-lg px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-md">Ingrediënten Bewerken</a>
+
                     @guest
                         <a href="{{ route('login') }}" class="text-lg">Inloggen</a>
                         <a href="{{ route('register') }}" class="text-lg">Registreren</a>
@@ -33,6 +36,7 @@
 
     <div class="flex justify-end mb-4">
         <a href="{{ route('pizzamedewerker.add') }}" class="bg-blue-500 hover:bg-blue-700 text-white px-6 py-2 rounded">Nieuwe Pizza Toevoegen</a>
+        <a href="{{ route('ingredienten.index') }}" class="bg-blue-500 hover:bg-blue-700 text-white px-6 py-2 rounded">Ingredient Overzicht</a>
     </div>
 
     <h2 class="text-2xl font-bold mb-4">Beschikbare Pizza's</h2>
@@ -44,7 +48,7 @@
                 <h3 class="text-xl font-bold text-center mb-2">{{ $pizza->naam }}</h3>
 
                 <div class="flex justify-center mb-4">
-                    <img src="{{ $pizza->afbeelding }}" alt="{{ $pizza->naam }}" class="w-32 h-32 object-cover rounded-full">
+                    <img src="{{ asset($pizza->afbeelding) }}" alt="{{ $pizza->naam }}" class="w-32 h-32 object-cover">
                 </div>
 
                 <p class="text-center text-lg font-semibold mb-4">€{{ number_format($pizza->prijs, 2) }}</p>

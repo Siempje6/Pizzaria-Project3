@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PizzaController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\MakePizzaController;
+use App\Http\Controllers\MakeIngredientController;
+
 
 Route::get('/', function () {
     return view('pizzas.index');
@@ -35,6 +37,15 @@ Route::prefix('pizzamedewerker')->middleware('auth')->group(function () {
     Route::get('/edit/{id}', [MakePizzaController::class, 'edit'])->name('pizzamedewerker.edit');
     Route::put('/{id}', [MakePizzaController::class, 'update'])->name('pizzamedewerker.update');
     Route::delete('/{id}', [MakePizzaController::class, 'destroy'])->name('pizzamedewerker.destroy');
+});
+
+Route::prefix('ingredienten')->middleware('auth')->group(function (){
+    Route::get('/', [MakeIngredientController::class, 'index'])->name('ingredienten.index');
+    Route::get('/add', [MakeIngredientController::class, 'create'])->name('ingredienten.add');
+    Route::post('/', [MakeIngredientController::class, 'store'])->name('ingredienten.store');
+    Route::get('/edit/{id}', [MakeIngredientController::class, 'edit'])->name('ingredienten.edit');
+    Route::put('/{id}', [MakeIngredientController::class, 'update'])->name('ingredienten.update');
+    Route::delete('/{id}', [MakeIngredientController::class, 'destroy'])->name('ingredienten.destroy');
 });
 
 

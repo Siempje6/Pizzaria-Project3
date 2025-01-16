@@ -70,31 +70,27 @@ class MakePizzaController extends Controller
      * Update the specified pizza in storage.
      */
     public function update(Request $request, $id)
-{
-    $request->validate([
-        'naam' => 'required|string|max:255',
-        'prijs' => 'required|numeric|min:0',
-        'afbeelding' => 'nullable|string|max:255', 
-        'ingredients' => 'nullable|array', 
-        'ingredients.*' => 'exists:ingredients,id', 
-    ]);
+    {
+        $request->validate([
+            'naam' => 'required|string|max:255',
+            'prijs' => 'required|numeric',
+            'afbeelding' => 'nullable|string|max:255',
+            'ingredients' => 'nullable|array',
+            'ingredients.*' => 'exists:ingrediënts,id', 
+        ]);
 
-    $pizza = Pizza::findOrFail($id);
+        $pizza = Pizza::findOrFail($id);
 
-    $pizza->update([
-        'naam' => $request->naam,
-        'prijs' => $request->prijs,
-        'afbeelding' => $request->afbeelding,
-    ]);
+        $pizza->update($request->all());
 
-    if ($request->has('ingredients')) {
-        $pizza->ingredients()->sync($request->ingredients);
-    } else {
-        $pizza->ingredients()->detach();
+        if ($request->has('ingredients')) {
+            $pizza->ingredients()->sync($request->ingredients); 
+        } else {
+            $pizza->ingredients()->detach(); 
+        }
+
+        return redirect()->route('pizzamedewerker.index')->with('success', 'Pizza succesvol bijgewerkt!');
     }
-
-    return redirect()->route('MedewerkerPizza.PizzaOverzicht')->with('success', 'Pizza succesvol bijgewerkt!');
-}
 
 
     /**

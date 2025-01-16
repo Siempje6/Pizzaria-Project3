@@ -223,10 +223,8 @@
         <div class="header-content">
             <a href="{{ route('pizzas.index') }}"><h1 class="text-3xl font-bold">Stonks Pizza</h1></a>
 
-            <nav class="nav-icons">
-                <a href="/winkelwagen">
-                    <i class="fas fa-shopping-cart"></i><span>Winkelwagen</span>
-                </a>
+        <nav class="flex items-center gap-4">
+            <a href="/winkelwagen" class="text-lg">Winkelwagen 🛒</a>
 
                 @guest
                     <a href="{{ route('login') }}">
