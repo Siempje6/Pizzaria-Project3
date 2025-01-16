@@ -16,6 +16,7 @@
             <thead class="bg-gray-800 text-white">
                 <tr>
                     <th class="py-3 px-4 text-left">Naam</th>
+                    <th class="py-3 px-4 text-left">Formaat</th>
                     <th class="py-3 px-4 text-left">Aantal</th>
                     <th class="py-3 px-4 text-left">Prijs per stuk</th>
                     <th class="py-3 px-4 text-left">Totaal</th>
@@ -28,6 +29,17 @@
                     @if(isset($item['pizza']))
                     <tr class="border-b">
                         <td class="py-3 px-4">{{ $item['pizza']->naam }}</td>
+                        <td class="py-3 px-4">
+                            <form action="{{ route('cart.update') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="pizza_id" value="{{ $item['pizza']->id }}">
+                                <select name="size_{{ $item['pizza']->id }}" onchange="this.form.submit()" class="bg-gray-200 px-4 py-2 rounded">
+                                    <option value="small" {{ ($item['size'] ?? '') == 'small' ? 'selected' : '' }}>Klein</option>
+                                    <option value="medium" {{ ($item['size'] ?? '') == 'medium' ? 'selected' : '' }}>Medium</option>
+                                    <option value="large" {{ ($item['size'] ?? '') == 'large' ? 'selected' : '' }}>Groot</option>
+                                </select>
+                            </form>
+                        </td>
                         <td class="py-3 px-4">
                             <form action="{{ route('cart.update') }}" method="POST">
                                 @csrf
@@ -55,7 +67,7 @@
             </tbody>
             <tfoot>
                 <tr class="bg-gray-200">
-                    <td colspan="3" class="py-3 px-4 text-right font-semibold">Totaal:</td>
+                    <td colspan="4" class="py-3 px-4 text-right font-semibold">Totaal:</td>
                     <td class="py-3 px-4 font-semibold">€{{ number_format($total, 2) }}</td>
                     <td class="py-3 px-4"></td>
                 </tr>

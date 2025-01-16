@@ -12,11 +12,9 @@ class CartController extends Controller
         // Haal de cart op uit de sessie
         $cart = session()->get('cart', []);
 
-        // Zorg dat de cart correct is gestructureerd
+        // Voeg prijzen toe aan de items in de winkelwagen
         foreach ($cart as &$item) {
-            if (!isset($item['pizza'])) {
-                $item['pizza'] = null; // Default waarde indien 'pizza' ontbreekt
-            }
+            $item['price'] = $this->calculatePrice($item['pizza'], $item['size']);
         }
 
         return view('PizzaBestel.Winkelwagen', compact('cart'));
@@ -26,17 +24,20 @@ class CartController extends Controller
     {
         $pizzaId = $request->input('pizza_id');
         $quantity = $request->input('quantity', 1);
+        $size = $request->input('size', 'medium'); // Standaard formaat is medium
 
         $pizza = Pizza::findOrFail($pizzaId);
 
         $cart = session()->get('cart', []);
 
-        if (isset($cart[$pizzaId])) {
+        if (isset($cart[$pizzaId]) && $cart[$pizzaId]['size'] == $size) {
             $cart[$pizzaId]['quantity'] += $quantity;
         } else {
             $cart[$pizzaId] = [
                 'pizza' => $pizza,
                 'quantity' => $quantity,
+                'size' => $size,
+                'price' => $this->calculatePrice($pizza, $size),
             ];
         }
 
@@ -48,47 +49,70 @@ class CartController extends Controller
     public function removeFromCart(Request $request)
     {
         $cart = session()->get('cart', []);
-    
-        // Verwijder het item
+
         foreach ($cart as $key => $item) {
             if ($item['pizza']->id == $request->pizza_id) {
                 unset($cart[$key]);
                 break;
             }
         }
-    
-        // Sla de geüpdatete cart op
+
         session()->put('cart', $cart);
-    
+
         return redirect()->route('cart.view');
     }
-    
+
     public function updateCart(Request $request)
     {
         $cart = session()->get('cart', []);
 
         foreach ($cart as $key => &$item) {
-            // Haal de actie (increase of decrease) op
             $action = $request->input("action_{$item['pizza']->id}");
 
-            // Verhoog of verlaag de hoeveelheid op basis van de actie
             if ($action == 'increase') {
-                $item['quantity'] += 1; // Verhoog de hoeveelheid met 1
+                $item['quantity'] += 1;
             } elseif ($action == 'decrease' && $item['quantity'] > 1) {
-                $item['quantity'] -= 1; // Verlaag de hoeveelheid met 1, maar niet onder 1
+                $item['quantity'] -= 1;
             } elseif ($request->has("quantity_{$item['pizza']->id}")) {
-                // Als de gebruiker een specifieke hoeveelheid heeft ingevoerd, werk die bij
                 $newQuantity = $request->input("quantity_{$item['pizza']->id}");
-
                 if ($newQuantity && $newQuantity > 0) {
-                    $item['quantity'] = $newQuantity; // Werk de hoeveelheid bij
+                    $item['quantity'] = $newQuantity;
                 }
             }
+
+            if ($request->has("size_{$item['pizza']->id}")) {
+                $newSize = $request->input("size_{$item['pizza']->id}");
+                if (in_array($newSize, ['small', 'medium', 'large'])) {
+                    $item['size'] = $newSize;
+                }
+            }
+
+            // Werk de prijs bij op basis van de grootte
+            $item['price'] = $this->calculatePrice($item['pizza'], $item['size']);
         }
 
-        // Sla de geüpdatete winkelwagen op
         session()->put('cart', $cart);
 
         return redirect()->route('cart.view')->with('success', 'Winkelwagen bijgewerkt!');
+    }
+
+    private function calculatePrice($pizza, $size)
+    {
+        // Voorbeeld: prijzen voor Pizza Hawaii
+        $prices = [
+            'Hawaii' => [
+                'small' => 10.99,
+                'medium' => 11.99,
+                'large' => 12.99,
+            ],
+        ];
+
+        // Haal de juiste prijs op voor de pizza en grootte
+        if (isset($prices[$pizza->name][$size])) {
+            return $prices[$pizza->name][$size];
+        }
+
+        // Default prijs indien niet gedefinieerd
+        return 0;
     }
 }
