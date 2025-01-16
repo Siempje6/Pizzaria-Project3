@@ -13,6 +13,9 @@
             <nav class="flex items-center gap-4">
                 <a href="/winkelwagen" class="text-lg">Winkelwagen 🛒</a>
 
+                <a href="{{ route('pizzamedewerker.index') }}" class="text-lg px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-md">Pizza's Bewerken</a>
+                <a href="{{ route('ingredienten.index') }}" class="text-lg px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-md">Ingrediënten Bewerken</a>
+
                 @guest
                     <a href="{{ route('login') }}" class="text-lg">Inloggen</a>
                     <a href="{{ route('register') }}" class="text-lg">Registreren</a>
