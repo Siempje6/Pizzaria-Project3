@@ -33,6 +33,7 @@
 
     <div class="flex justify-end mb-4">
         <a href="{{ route('pizzamedewerker.add') }}" class="bg-blue-500 hover:bg-blue-700 text-white px-6 py-2 rounded">Nieuwe Pizza Toevoegen</a>
+        <a href="{{ route('ingredienten.index') }}" class="bg-blue-500 hover:bg-blue-700 text-white px-6 py-2 rounded">Ingredient Overzicht</a>
     </div>
 
     <h2 class="text-2xl font-bold mb-4">Beschikbare Pizza's</h2>
