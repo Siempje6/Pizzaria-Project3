@@ -64,8 +64,6 @@ Route::get('/test-cart', function () {
 
 Route::resource('pizzas', PizzaController::class);
 
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\CheckoutController;
 
 Route::middleware(['auth'])->get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
