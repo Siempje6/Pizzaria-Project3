@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Pizza;
 use App\Models\Ingrediënt;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Auth;
 use IntlChar;
 
 class MakePizzaController extends Controller
