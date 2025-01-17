@@ -44,10 +44,11 @@ class MakePizzaController extends Controller
             'ingredients.*' => 'exists:ingrediënts,id', 
         ]);
 
+        $afbeelding = $request->has('afbeelding') ? $request->afbeelding : 'default-pizza-image.jpg';
         $pizza = Pizza::create([
             'naam' => $request->naam,
             'prijs' => $request->prijs,
-            'afbeelding' => $request->afbeelding,
+            'afbeelding' => $afbeelding,
         ]);
 
         if ($request->has('ingredients')) {
@@ -81,9 +82,12 @@ class MakePizzaController extends Controller
             'ingredients.*' => 'exists:ingrediënts,id', 
         ]);
 
+        
         $pizza = Pizza::findOrFail($id);
 
-        $pizza->update($request->all());
+        $afbeelding = $request->has('afbeelding') ? $request->afbeelding : $pizza->afbeelding;
+        $pizza->update($request->all($afbeelding));
+        
 
         if ($request->has('ingredients')) {
             $pizza->ingredients()->sync($request->ingredients); 

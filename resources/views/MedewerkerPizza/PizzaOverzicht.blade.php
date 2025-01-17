@@ -268,7 +268,7 @@
                 <h3 class="text-xl font-bold text-center mb-2">{{ $pizza->naam }}</h3>
 
                 <div class="flex justify-center mb-4">
-                    <img src="{{ asset($pizza->afbeelding) }}" alt="{{ $pizza->naam }}" class="w-32 h-32 object-cover">
+                <img src="{{ $pizza->afbeelding ? asset('storage/' . $pizza->afbeelding) : asset('images/hawai.jpg') }}" alt="{{ $pizza->naam }}" class="pizza-image">
                 </div>
 
                 <p class="text-center text-lg font-semibold mb-4">€{{ number_format($pizza->prijs, 2) }}</p>

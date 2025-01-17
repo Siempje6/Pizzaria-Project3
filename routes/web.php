@@ -10,11 +10,6 @@ use App\Http\Controllers\MakeIngredientController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CheckoutController;
 
-
-Route::get('/', function () {
-    return view('pizzas.index');
-});
-
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
@@ -47,9 +42,11 @@ Route::middleware('role:admin|superadmin')->group(function () {
 });
 
 // voor gasten en rest
+Route::resource('/' , PizzaController::class)->only(['index', 'show']);
 Route::resource('pizzas', PizzaController::class)->only(['index', 'show']);
 Route::resource('pizzamedewerker', MakePizzaController::class)->only(['index']);
 Route::resource('ingredienten', MakeIngredientController::class)->only(['index']);
+Route::resource('admin', AdminController::class)->only(['index']);
 
 
 Route::get('/test-cart', function () {
