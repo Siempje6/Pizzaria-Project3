@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -27,5 +26,11 @@ class Pizza extends Model
     public function bestelregels()
     {
         return $this->hasMany(Bestelregel::class);
+    }
+
+    // Relatie met PizzaSize om prijzen per formaat op te halen
+    public function sizes()
+    {
+        return $this->hasMany(PizzaSize::class);
     }
 }

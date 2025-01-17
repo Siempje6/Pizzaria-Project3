@@ -2,64 +2,67 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Pizza;
 use App\Models\Bestelling;
 use App\Models\Bestelregel;
 use App\Models\Klant;
-use Illuminate\Support\Facades\Session;
 
 class CheckoutController extends Controller
 {
-    // Toon de checkout-pagina
     public function showCheckout()
     {
-        $cart = session()->get('cart', []);  // Haal winkelwagen op uit de sessie
-        return view('checkout', compact('cart'));
-    }
-
-    // Verwerk de checkout en sla de klant- en bestellinggegevens op
-    public function processCheckout(Request $request)
-    {
-        // Haal winkelwagen op uit de sessie
         $cart = session()->get('cart', []);
-        $totaalPrijs = 0;
 
-        // Bereken de totaalprijs van de bestelling
-        foreach ($cart as $item) {
-            $totaalPrijs += $item['pizza']->prijs * $item['quantity'];
+        if (empty($cart)) {
+            return redirect()->route('cart.view')->with('error', 'Je winkelwagen is leeg.');
         }
 
-        // Maak de klant aan en sla deze op
-        $klant = Klant::create([
-            'naam' => $request->naam,
-            'adres' => $request->adres,
-            'woonplaats' => $request->woonplaats,
-            'telefoonnummer' => $request->telefoonnummer,
-            'emailadres' => $request->emailadres,
-        ]);
+        $user = Auth::user(); // Ophalen van ingelogde klant
+        $klant = Klant::where('emailadres', $user->email)->first(); // Verbind klantgegevens
 
-        // Maak de bestelling aan en koppel deze aan de klant
+        // Bereken totaalprijs
+        $totalPrice = array_reduce($cart, function ($total, $item) {
+            return $total + ($item['quantity'] * $item['price']);
+        }, 0);
+
+        return view('PizzaBestel.Checkout', compact('cart', 'klant', 'totalPrice'));
+    }
+
+    public function processCheckout(Request $request)
+    {
+        $cart = session()->get('cart', []);
+
+        if (empty($cart)) {
+            return redirect()->route('cart.view')->with('error', 'Je winkelwagen is leeg.');
+        }
+
+        $user = Auth::user();
+        $klant = Klant::where('emailadres', $user->email)->first();
+
+        // Maak een nieuwe bestelling aan
         $bestelling = Bestelling::create([
             'klant_id' => $klant->id,
             'datum' => now(),
-            'status' => 'Initieel',
-            'totaalprijs' => $totaalPrijs,
+            'totaalprijs' => $request->input('totalPrice'),
+            'status' => 'In behandeling',
         ]);
 
-        // Voeg bestelregels toe voor elke pizza in de winkelwagen
+        // Voeg bestelregels toe
         foreach ($cart as $item) {
             Bestelregel::create([
                 'bestelling_id' => $bestelling->id,
                 'pizza_id' => $item['pizza']->id,
                 'aantal' => $item['quantity'],
-                'afmeting' => $item['afmeting'],  // Verondersteld dat afmeting aanwezig is
-                'regelprijs' => $item['pizza']->prijs * $item['quantity'],
+                'afmeting' => $item['size'],
+                'regelprijs' => $item['quantity'] * $item['price'],
             ]);
         }
 
-        // Leeg de winkelwagen na het plaatsen van de bestelling
+        // Leeg de winkelwagen
         session()->forget('cart');
 
-        // Stuur de gebruiker naar een succespagina
-        return redirect()->route('order.success')->with('success', 'Bestelling succesvol geplaatst!');
+        return redirect()->route('order.confirmation', ['order' => $bestelling->id])
+            ->with('success', 'Je bestelling is succesvol geplaatst!');
     }
 }

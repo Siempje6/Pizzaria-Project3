@@ -1,9 +1,9 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Pizza;
+use App\Models\PizzaSize; // Zorg ervoor dat je het PizzaSize-model importeert
 
 class CartController extends Controller
 {
@@ -98,21 +98,12 @@ class CartController extends Controller
 
     private function calculatePrice($pizza, $size)
     {
-        // Voorbeeld: prijzen voor Pizza Hawaii
-        $prices = [
-            'Hawaii' => [
-                'small' => 10.99,
-                'medium' => 11.99,
-                'large' => 12.99,
-            ],
-        ];
+        // Zoek de prijs op uit de pizza_sizes tabel
+        $pizzaSize = PizzaSize::where('pizza_id', $pizza->id)
+            ->where('size', $size)
+            ->first();
 
-        // Haal de juiste prijs op voor de pizza en grootte
-        if (isset($prices[$pizza->name][$size])) {
-            return $prices[$pizza->name][$size];
-        }
-
-        // Default prijs indien niet gedefinieerd
-        return 0;
+        // Als de pizza-grootte niet wordt gevonden, geef dan een standaardprijs terug
+        return $pizzaSize ? $pizzaSize->price : 0;
     }
 }

@@ -59,7 +59,12 @@ Route::get('/test-cart', function () {
     return redirect()->route('cart.view');
 });
 
-Route::get('/checkout', [CheckoutController::class, 'showCheckout'])->name('checkout');
-Route::post('/checkout', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
+Route::resource('pizzas', PizzaController::class);
 
-require __DIR__ . '/auth.php';
+
+Route::middleware(['auth'])->get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+Route::middleware('auth')->group(function() {
+    Route::get('/checkout', [CheckoutController::class, 'showCheckout'])->name('checkout');
+    Route::post('/checkout', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
+});
