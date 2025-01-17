@@ -36,3 +36,4 @@ class CreateBestellingsTable extends Migration
         Schema::dropIfExists('bestellings');
     }
 }
+

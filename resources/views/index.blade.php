@@ -8,6 +8,11 @@
     <!-- Voeg Font Awesome toe voor de icoontjes -->
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <style>
+        /* Zorg ervoor dat de infobalk niet buiten de pagina treedt */
+        body {
+            overflow-x: hidden; /* Voorkomt dat de infobalk de pagina breder maakt */
+        }
+
         /* Header en infobalk als één blok */
         header {
             background-color: #2d3748;
@@ -28,6 +33,8 @@
             text-align: center;
             font-size: 16px;
             letter-spacing: 1px;
+            white-space: nowrap; /* Voorkomt dat de tekst wordt afgebroken */
+            overflow: hidden; /* Voorkomt dat de tekst de container verlaat */
         }
 
         .info-bar p {
@@ -223,8 +230,8 @@
         <div class="header-content">
             <a href="{{ route('pizzas.index') }}"><h1 class="text-3xl font-bold">Stonks Pizza</h1></a>
 
-        <nav class="flex items-center gap-4">
-            <a href="/winkelwagen" class="text-lg">Winkelwagen 🛒</a>
+            <nav class="flex items-center gap-4">
+                <a href="/winkelwagen" class="text-lg">Winkelwagen 🛒</a>
 
                 @guest
                     <a href="{{ route('login') }}">
@@ -260,25 +267,51 @@
         <h2 class="text-2xl font-semibold mb-4 text-center">Onze Pizzas</h2>
 
         <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 pizza-card-container">
-            @foreach($pizzas as $pizza)
-                <div class="pizza-card">
-                    <img src="{{ $pizza->afbeelding }}" alt="{{ $pizza->naam }}" class="pizza-img">
+        @foreach($pizzas as $pizza)
+            <div class="pizza-card">
+                <img src="{{ $pizza->afbeelding }}" alt="{{ $pizza->naam }}" class="pizza-img">
 
-                    <div class="p-4">
-                        <h3 class="text-xl">{{ $pizza->naam }}</h3>
-                        <p class="text-gray-500">&euro;{{ number_format($pizza->prijs, 2) }}</p>
-                    </div>
-
-                    <form action="/add-to-cart" method="POST" class="p-4 w-full flex items-center justify-center gap-4">
-                        @csrf
-                        <input type="hidden" name="pizza_id" value="{{ $pizza->id }}">
-                        <input type="number" name="aantal" value="1" min="1" class="w-16 border py-2 border-gray-300 rounded text-center focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Toevoegen</button>
-                    </form>
+                <div class="p-4">
+                    <h3 class="text-xl">{{ $pizza->naam }}</h3>
+                    
+                    <!-- Toon de beschikbare groottes en prijzen -->
+                    <select name="size" class="w-full border py-2 border-gray-300 rounded margin-top m-2">
+                        @foreach($pizza->sizes as $size)
+                            <option value="{{ $size->size }}">{{ $size->size }} - €{{ number_format($size->price, 2) }}</option>
+                        @endforeach
+                    </select>
                 </div>
-            @endforeach
+
+                <form action="/add-to-cart" method="POST" class="p-4 w-full flex items-center justify-center gap-4">
+                    @csrf
+                    <input type="hidden" name="pizza_id" value="{{ $pizza->id }}">
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Toevoegen</button>
+                    <button type="button" class="bg-red-500 text-white px-4 py-2 rounded" onclick="openModal('{{ $pizza->naam }}', '{{ $pizza->omschrijving }}')">Bekijken</button>
+                </form>
+            </div>
+        @endforeach
         </div>
     </div>
 
+    <!-- Modal Popup -->
+    <div id="pizzaModal" class="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle"></h2>
+            <p id="modalDescription"></p>
+            <button onclick="closeModal()">Sluiten</button>
+        </div>
+    </div>
+
+    <script>
+        function openModal(name, description) {
+            document.getElementById('modalTitle').innerText = name;
+            document.getElementById('modalDescription').innerText = description;
+            document.getElementById('pizzaModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('pizzaModal').style.display = 'none';
+        }
+    </script>
 </body>
 </html>

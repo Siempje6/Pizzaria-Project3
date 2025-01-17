@@ -2,13 +2,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pizza;
+use App\Models\PizzaSize;
 use Illuminate\Http\Request;
 
 class PizzaController extends Controller
 {
     public function index()
     {
-        $pizzas = Pizza::all();  
+        // Haal de pizzas op met hun groottes
+        $pizzas = Pizza::with('sizes')->get();  
         
         return view('index', compact('pizzas'));
     }
@@ -19,6 +21,10 @@ class PizzaController extends Controller
         $quantity = 1; // standaard aantal
         $pizza = Pizza::findOrFail($pizzaId);
 
+        // Haal de pizza-grootte op
+        $size = $request->input('size');
+        $pizzaSize = PizzaSize::where('pizza_id', $pizzaId)->where('size', $size)->first();
+
         $cart = session()->get('cart', []);
 
         if (isset($cart[$pizzaId])) {
@@ -27,6 +33,8 @@ class PizzaController extends Controller
             $cart[$pizzaId] = [
                 'pizza' => $pizza,
                 'quantity' => $quantity,
+                'size' => $pizzaSize->size,
+                'price' => $pizzaSize->price,
             ];
         }
 
@@ -34,21 +42,5 @@ class PizzaController extends Controller
 
         return redirect()->route('pizzas.index')->with('success', 'Pizza toegevoegd aan winkelwagen!');
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
 }
+

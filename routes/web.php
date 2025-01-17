@@ -73,7 +73,5 @@ use App\Http\Controllers\CheckoutController;
 
 Route::middleware(['auth'])->get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-Route::middleware('auth')->group(function() {
-    Route::get('/checkout', [CheckoutController::class, 'showCheckout'])->name('checkout');
-    Route::post('/checkout', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
-});
+Route::get('/checkout', [CheckoutController::class, 'showCheckout'])->name('checkout');
+Route::post('/checkout', [CheckoutController::class, 'processCheckout'])->name('checkout.process');

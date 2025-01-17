@@ -22,3 +22,4 @@ class Bestelling extends Model
         return $this->hasMany(Bestelregel::class);
     }
 }
+

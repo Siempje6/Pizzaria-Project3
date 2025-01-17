@@ -4,18 +4,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Bestelregel extends Model
+class PizzaSize extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'bestelling_id', 'pizza_id', 'aantal', 'afmeting', 'regelprijs'
-    ];
+    protected $table = 'pizza_sizes';
 
-    public function bestelling()
-    {
-        return $this->belongsTo(Bestelling::class);
-    }
+    protected $fillable = ['pizza_id', 'size', 'price'];
 
     public function pizza()
     {
