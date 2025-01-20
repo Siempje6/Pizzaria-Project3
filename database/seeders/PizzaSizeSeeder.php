@@ -13,9 +13,9 @@ class PizzaSizeSeeder extends Seeder
      */
     public function run(): void
     {
-        PizzaSize::create(['pizza_id' => 1, 'size' => 'small', 'price' => 8.99]);
-        PizzaSize::create( ['pizza_id' => 1, 'size' => 'medium', 'price' => 10.99]);
-        PizzaSize::create(['pizza_id' => 1, 'size' => 'large', 'price' => 12.99]);
+        PizzaSize::create(['id' => 1, 'size' => 'small', 'price' => 8.99]);
+        PizzaSize::create(['id' => 2, 'size' => 'medium', 'price' => 10.99]);
+        PizzaSize::create(['id' => 3, 'size' => 'large', 'price' => 12.99]);
         
     }
 }

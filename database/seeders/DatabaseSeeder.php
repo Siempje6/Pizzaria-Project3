@@ -23,6 +23,8 @@ class DatabaseSeeder extends Seeder
             PizzaSizeSeeder::class,
             Rolesseeder::class,
             UserSeeder::class,
+            IngredientSeeder::class,
+
         ]);
 
 

@@ -271,7 +271,7 @@
         </div>
 
         <label for="ingredients" class="block text-gray-700 font-bold mb-2">Ingrediënten:</label>
-        <select name="ingredients[]" id="ingredients" required multiple class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight">
+        <select name="ingredients[]" id="ingredients" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight" multiple>
             @foreach($ingredients as $ingredient)
                 <option value="{{ $ingredient->id }}"> {{ $ingredient->naam }} - € {{ $ingredient->prijs }}
                 </option>
