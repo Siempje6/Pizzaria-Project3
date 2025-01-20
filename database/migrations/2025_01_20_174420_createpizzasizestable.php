@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('pizza_sizes', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('pizza_id')->constrained();
             $table->string('size'); // small, medium, large
             $table->decimal('price', 8, 2); // prijs van de pizza
             $table->timestamps();
