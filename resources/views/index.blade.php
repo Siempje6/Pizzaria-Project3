@@ -273,6 +273,16 @@
 
                 <div class="p-4">
                     <h3 class="text-xl">{{ $pizza->naam }}</h3>
+
+                    <tr>
+                    <h3 class="text-l font-bold text-center mb-2">Ingredienten:</h3>
+                    <td>
+                        @foreach($pizza->ingredients as $ingredient)
+                            - {{ $ingredient->naam }}<br>
+                        @endforeach
+                    </td>
+                    <br>
+                    </tr>
                     
                     <select name="size" class="w-full border py-2 border-gray-300 rounded margin-top m-2">
                         @foreach($pizza->sizes as $size)
@@ -285,7 +295,7 @@
                     @csrf
                     <input type="hidden" name="pizza_id" value="{{ $pizza->id }}">
                     <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Toevoegen</button>
-                    <button type="button" class="bg-red-500 text-white px-4 py-2 rounded" onclick="openModal('{{ $pizza->naam }}', '{{ $pizza->omschrijving }}')">Bekijken</button>
+                    <button type="button" class="bg-red-500 text-white px-4 py-2 rounded" onclick="openModal('{{ $pizza->naam }}')">Bekijken</button>
                 </form>
             </div>
         @endforeach
