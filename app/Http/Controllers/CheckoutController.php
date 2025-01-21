@@ -18,15 +18,14 @@ class CheckoutController extends Controller
             return redirect()->route('cart.view')->with('error', 'Je winkelwagen is leeg.');
         }
 
-        $user = Auth::user(); // Ophalen van ingelogde klant
-        $klant = Klant::where('emailadres', $user->email)->first(); // Verbind klantgegevens
+        $user = Auth::user(); 
+        $klant = Klant::where('emailadres', $user->email)->first(); 
 
-        // Bereken totaalprijs
         $totalPrice = array_reduce($cart, function ($total, $item) {
             return $total + ($item['quantity'] * $item['price']);
         }, 0);
 
-        return view('PizzaBestel.Checkout', compact('cart', 'klant', 'totalPrice'));
+        return view('PizzaBestel.Checkout', compact('user', 'cart', 'klant', 'totalPrice'));
     }
 
     public function processCheckout(Request $request)
@@ -40,7 +39,6 @@ class CheckoutController extends Controller
         $user = Auth::user();
         $klant = Klant::where('emailadres', $user->email)->first();
 
-        // Maak een nieuwe bestelling aan
         $bestelling = Bestelling::create([
             'klant_id' => $klant->id,
             'datum' => now(),
@@ -48,7 +46,6 @@ class CheckoutController extends Controller
             'status' => 'In behandeling',
         ]);
 
-        // Voeg bestelregels toe
         foreach ($cart as $item) {
             Bestelregel::create([
                 'bestelling_id' => $bestelling->id,
@@ -59,7 +56,6 @@ class CheckoutController extends Controller
             ]);
         }
 
-        // Leeg de winkelwagen
         session()->forget('cart');
 
         return redirect()->route('order.confirmation', ['order' => $bestelling->id])

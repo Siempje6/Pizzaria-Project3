@@ -18,6 +18,24 @@ class Pizza extends Model
         'afbeeldingen',
     ];
 
+    protected static function booted()
+    {
+        static::created(function ($pizza) {
+            $sizes = [
+                ['size' => 'small', 'price' => 8.99],
+                ['size' => 'medium', 'price' => 10.99],
+                ['size' => 'large', 'price' => 12.99],
+            ];
+
+            foreach ($sizes as $size) {
+                PizzaSize::create([
+                    'pizza_id' => $pizza->id,
+                    'size' => $size['size'],
+                    'price' => $size['price'],
+                ]);
+            }
+        });
+    }
     public function ingredients()
     {
         return $this->belongsToMany(Ingrediënt::class, 'pizza_ingrediënt');
@@ -28,7 +46,6 @@ class Pizza extends Model
         return $this->hasMany(Bestelregel::class);
     }
 
-    // Relatie met PizzaSize om prijzen per formaat op te halen
     public function sizes()
     {
         return $this->hasMany(PizzaSize::class);

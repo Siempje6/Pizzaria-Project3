@@ -6,10 +6,8 @@
 
     <div class="bg-white shadow-md rounded-lg p-6 mb-6">
         <h2 class="text-2xl font-bold mb-4">Klantgegevens</h2>
-        <p><strong>Naam:</strong> {{ $klant->naam }}</p>
-        <p><strong>Email:</strong> {{ $klant->emailadres }}</p>
-        <p><strong>Adres:</strong> {{ $klant->adres }}, {{ $klant->woonplaats }}</p>
-        <p><strong>Telefoon:</strong> {{ $klant->telefoonnummer }}</p>
+        <p><strong>Naam:</strong> {{ $user->naam }}</p>
+        <p><strong>Email:</strong> {{ $user->emailadres }}</p>
     </div>
 
     <div class="bg-white shadow-md rounded-lg p-6 mb-6">

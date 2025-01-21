@@ -46,8 +46,10 @@ class AdminController extends Controller
         ]);
 
         if ($request->role) {
-            $user->assignRole($request->role);
+            $role = Role::find($request->role); 
+            $user->assignRole($role->name);   
         }
+        
 
         return redirect()->route('admin.index')->with('success', 'User created successfully!');
     }
@@ -82,9 +84,10 @@ class AdminController extends Controller
             'password' => $request->password ? Hash::make($request->password) : $user->password, 
         ]);
         if ($request->role) {
-            $user->syncRoles([$request->role]);
+            $role = Role::find($request->role);
+            $user->syncRoles([$role->name]);
         } else {
-            $user->syncRoles([]);
+            $user->syncRoles([]); 
         }
 
         return redirect()->route('admin.index')->with('success', 'User updated successfully!');
