@@ -8,21 +8,24 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     *
+     * @return void
      */
     public function up(): void
     {
         Schema::create('pizza_sizes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('pizza_id');
+            $table->foreignId('pizza_id')->constrained();
             $table->string('size'); // small, medium, large
             $table->decimal('price', 8, 2); // prijs van de pizza
-            $table->foreign('pizza_id')->references('id')->on('pizzas');
             $table->timestamps();
         });
     }
 
     /**
      * Reverse the migrations.
+     *
+     * @return void
      */
     public function down(): void
     {

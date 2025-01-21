@@ -274,7 +274,6 @@
                 <div class="p-4">
                     <h3 class="text-xl">{{ $pizza->naam }}</h3>
                     
-                    <!-- Toon de beschikbare groottes en prijzen -->
                     <select name="size" class="w-full border py-2 border-gray-300 rounded margin-top m-2">
                         @foreach($pizza->sizes as $size)
                             <option value="{{ $size->size }}">{{ $size->size }} - €{{ number_format($size->price, 2) }}</option>
