@@ -13,7 +13,7 @@ class UserSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run()
+    public function run(): void
 {
     $admin = User::create([
         'name' => 'Admin User',

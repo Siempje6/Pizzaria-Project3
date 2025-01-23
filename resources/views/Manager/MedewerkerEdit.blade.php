@@ -194,7 +194,7 @@
 <div class="container mx-auto p-6">
     <h1 class="text-3xl font-bold mb-6 text-center">Gebruiker Bewerken</h1>
 
-    <form action="{{ route('admin.users.update', $user->id) }}" method="POST">
+    <form action="{{ route('admin.update', $user->id) }}" method="POST">
         @csrf
         @method('PUT')
         <div class="space-y-4">
@@ -224,7 +224,7 @@
                 <select name="role" id="role" class="w-full p-3 border rounded">
                     <option value="">Selecteer een rol</option>
                     @foreach($roles as $role)
-                        <option value="{{ $role->id }}" {{ old('role', $user->roles->first()->id) == $role->id ? 'selected' : '' }}>{{ $role->name }}</option>
+                        <option value="{{ $role->id }}">{{ $role->name }}</option>
                     @endforeach
                 </select>
             </div>

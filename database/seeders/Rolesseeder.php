@@ -11,7 +11,7 @@ class Rolesseeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run()
+    public function run(): void
     {
         Role::create(['name' => 'admin']);
         Role::create(['name' => 'superadmin']);

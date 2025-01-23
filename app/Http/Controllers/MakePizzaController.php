@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pizza;
+use App\Models\PizzaSize;
 use App\Models\Ingrediënt;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
@@ -43,8 +44,8 @@ class MakePizzaController extends Controller
             'ingredients' => 'nullable|array',
             'ingredients.*' => 'exists:ingrediënts,id', 
         ]);
+        $afbeelding = $request->input('afbeelding');
 
-        $afbeelding = $request->has('afbeelding') ? $request->afbeelding : 'default-pizza-image.jpg';
         $pizza = Pizza::create([
             'naam' => $request->naam,
             'prijs' => $request->prijs,
@@ -104,6 +105,7 @@ class MakePizzaController extends Controller
      */
     public function destroy($id)
     {
+        PizzaSize::where('pizza_id', $id)->delete();
         $pizza = Pizza::findOrFail($id);
         $pizza->delete();
 

@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\Ingrediënt;
 use App\Models\Pizza;
 use App\Models\PizzaSize;
 use Illuminate\Http\Request;
@@ -9,19 +10,19 @@ class PizzaController extends Controller
 {
     public function index()
     {
-        // Haal de pizzas op met hun groottes
-        $pizzas = Pizza::with('sizes')->get();  
-        
-        return view('index', compact('pizzas'));
+        $pizzas = Pizza::with('sizes')->get();
+
+        $ingredients = Ingrediënt::all();
+
+        return view('index', compact('pizzas', 'ingredients'));
     }
 
     public function addToCart(Request $request)
     {
         $pizzaId = $request->input('pizza_id');
-        $quantity = 1; // standaard aantal
+        $quantity = 1; 
         $pizza = Pizza::findOrFail($pizzaId);
 
-        // Haal de pizza-grootte op
         $size = $request->input('size');
         $pizzaSize = PizzaSize::where('pizza_id', $pizzaId)->where('size', $size)->first();
 
