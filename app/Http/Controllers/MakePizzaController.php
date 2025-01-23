@@ -32,9 +32,6 @@ class MakePizzaController extends Controller
         return view('MedewerkerPizza.PizzaAdd', compact('pizzas' , 'ingredients'));
     }
 
-    /**
-     * Store a newly created pizza in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -61,9 +58,6 @@ class MakePizzaController extends Controller
         return redirect()->route('pizzamedewerker.index')->with('success', 'Pizza toegevoegd!');
     }
 
-    /**
-     * Show the form for editing the specified pizza.
-     */
     public function edit($id)
     {
         $pizza = Pizza::with('ingredients')->findOrFail($id); 
@@ -105,9 +99,6 @@ class MakePizzaController extends Controller
     }
 
 
-    /**
-     * Remove the specified pizza from storage.
-     */
     public function destroy($id)
     {
         PizzaSize::where('pizza_id', $id)->delete();

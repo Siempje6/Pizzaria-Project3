@@ -8,12 +8,11 @@
     <!-- Voeg Font Awesome toe voor de icoontjes -->
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <style>
-        /* Zorg ervoor dat de infobalk niet buiten de pagina treedt */
+
         body {
-            overflow-x: hidden; /* Voorkomt dat de infobalk de pagina breder maakt */
+            overflow-x: hidden;
         }
 
-        /* Header en infobalk als één blok */
         header {
             background-color: #2d3748;
             color: white;
@@ -33,8 +32,8 @@
             text-align: center;
             font-size: 16px;
             letter-spacing: 1px;
-            white-space: nowrap; /* Voorkomt dat de tekst wordt afgebroken */
-            overflow: hidden; /* Voorkomt dat de tekst de container verlaat */
+            white-space: nowrap; 
+            overflow: hidden; 
         }
 
         .info-bar p {
@@ -49,7 +48,6 @@
             100% { transform: translateX(-100%); }
         }
 
-        /* Visueel element tussen de header en pizza's */
         .visual-divider {
             background-color: #edf2f7;
             height: 2px;
@@ -64,7 +62,6 @@
             100% { width: 100%; }
         }
 
-        /* Pizza card styling */
         .pizza-card {
             transition: transform 0.3s, box-shadow 0.3s;
             background-color: white;
@@ -115,17 +112,14 @@
             color: white;
         }
 
-        /* Ruimte boven de inhoud */
         .container {
             margin-top: 0;
         }
 
-        /* Verplaats de pizza kaarten dichter bij de bovenkant */
         .pizza-card-container {
             margin-top: 10px;
         }
 
-        /* Popup styling */
         .modal {
             position: fixed;
             top: 0;
@@ -199,7 +193,6 @@
             outline: none;
         }
 
-        /* Styling voor de icoontjes en tekst in de navigatie */
         .nav-icons {
             display: flex;
             gap: 16px;
