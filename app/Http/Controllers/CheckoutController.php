@@ -94,16 +94,21 @@ class CheckoutController extends Controller
         // Verwijder het winkelwagentje uit de sessie na de bestelling
         session()->forget('cart');
 
+        // Redirect naar de orderbevestigingspagina
+        return redirect()->route('order.confirmation', ['orderId' => $bestelling->id]);
     }
+
+    /**
+     * Bevestig de bestelling na checkout
+     */
     public function confirmation($orderId)
-{
-    // Haal de bestelling op op basis van het orderID
-    $bestelling = Bestelling::with('bestelregels.pizza')->findOrFail($orderId);
+    {
+        // Haal de bestelling op op basis van het orderID
+        $bestelling = Bestelling::with('bestelregels.pizza')->findOrFail($orderId);
 
-    // Geef de bevestigingspagina weer met de bestelling
-    return view('order.confirmation', compact('bestelling'));
-}
-
+        // Geef de bevestigingspagina weer met de bestelling
+        return view('order.confirmation', compact('bestelling'));
+    }
 
     /**
      * Haal de juiste enum waarde voor de afmeting

@@ -31,14 +31,19 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::post('/checkout', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
+    // Toon de checkoutpagina
     Route::get('/checkout', [CheckoutController::class, 'showCheckout'])->name('checkout');
-Route::post('/checkout/customer', [CheckoutController::class, 'createCustomer'])->name('checkout.createCustomer');
+
+    // Verwerk de checkout
+    Route::post('/checkout', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
+    
+    // Klant aanmaken na checkout
+    Route::post('/checkout/customer', [CheckoutController::class, 'createCustomer'])->name('checkout.createCustomer');
+
+    // Bevestigingspagina van bestelling
+    Route::get('/order/confirmation/{orderId}', [CheckoutController::class, 'confirmation'])->name('order.confirmation');
 
 });
-
-Route::get('/order/confirmation/{orderId}', [CheckoutController::class, 'confirmation'])->name('order.confirmation');
-
 
 
 // Routes voor superadmins
