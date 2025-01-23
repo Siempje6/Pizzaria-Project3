@@ -9,6 +9,7 @@ use App\Http\Controllers\MakePizzaController;
 use App\Http\Controllers\MakeIngredientController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\BestellingController;
 
 // Zorg ervoor dat authenticatie-routes zijn geregistreerd (bijvoorbeeld via Laravel Breeze of Laravel UI).
 require __DIR__.'/auth.php';
@@ -48,23 +49,23 @@ Route::middleware('auth')->group(function () {
 
 // Routes voor superadmins
 Route::middleware(['auth', 'role:superadmin'])->group(function () {
-    Route::resource('admin', AdminController::class)->only(['show', 'edit', 'update', 'create', 'store', 'destroy']);
+    Route::resource('admin', AdminController::class)->only(['index', 'show', 'edit', 'update', 'create', 'store', 'destroy']);
 });
 
 // Routes voor admins en superadmins
 Route::middleware(['auth', 'role:admin|superadmin'])->group(function () {
-    Route::resource('pizzamedewerker', MakePizzaController::class)->only(['show', 'edit', 'update', 'create', 'store', 'destroy']);
-    Route::resource('ingredienten', MakeIngredientController::class)->only(['show', 'edit', 'update', 'create', 'store', 'destroy']);
+    Route::resource('pizzamedewerker', MakePizzaController::class)->only(['index', 'show', 'edit', 'update', 'create', 'store', 'destroy']);
+    Route::resource('ingredienten', MakeIngredientController::class)->only(['index', 'show', 'edit', 'update', 'create', 'store', 'destroy']);
+    Route::resource('bestellingen', BestellingController::class)->only(['index', 'show', 'edit', 'update']);
 });
 
 // Publieke routes
-Route::resource('/', PizzaController::class)->only(['index', 'show']);
+Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 Route::resource('pizzas', PizzaController::class)->only(['index', 'show']);
-Route::resource('pizzamedewerker', MakePizzaController::class)->only(['index']);
-Route::resource('ingredienten', MakeIngredientController::class)->only(['index']);
-Route::resource('admin', AdminController::class)->only(['index']);
+Route::resource('bestellingen', BestellingController::class)->only(['index', 'show']);
 
-// Testroute voor winkelwagen (voor ontwikkelingsdoeleinden)
+// Testroute voor winkelwagen
+
 Route::get('/test-cart', function () {
     $pizza = (object) ['id' => 1, 'naam' => 'Margherita', 'prijs' => 7.50];
     $cart = [
