@@ -40,16 +40,18 @@ class MakePizzaController extends Controller
         $request->validate([
             'naam' => 'required|string|max:255',
             'prijs' => 'required|numeric',
-            'afbeelding' => 'nullable|string|max:255',
+            'afbeelding' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048', 
             'ingredients' => 'nullable|array',
-            'ingredients.*' => 'exists:ingrediënts,id', 
+            'ingredients.*' => 'exists:ingrediënts,id',
         ]);
-        $afbeelding = $request->input('afbeelding');
+
+        if ($request->hasFile('afbeelding')) {
+            $request->file('afbeelding')->store('images', 'public'); 
+        }
 
         $pizza = Pizza::create([
             'naam' => $request->naam,
             'prijs' => $request->prijs,
-            'afbeelding' => $afbeelding,
         ]);
 
         if ($request->has('ingredients')) {
@@ -70,30 +72,33 @@ class MakePizzaController extends Controller
         return view('MedewerkerPizza.PizzaEdit', compact('pizza', 'ingredients'));
     }
 
-    /**
-     * Update the specified pizza in storage.
-     */
     public function update(Request $request, $id)
     {
         $request->validate([
             'naam' => 'required|string|max:255',
             'prijs' => 'required|numeric',
-            'afbeelding' => 'nullable|string|max:255',
+            'afbeelding' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
             'ingredients' => 'nullable|array',
-            'ingredients.*' => 'exists:ingrediënts,id', 
+            'ingredients.*' => 'exists:ingrediënts,id',
         ]);
 
-        
         $pizza = Pizza::findOrFail($id);
 
-        $afbeelding = $request->has('afbeelding') ? $request->afbeelding : $pizza->afbeelding;
-        $pizza->update($request->all($afbeelding));
-        
+        if ($request->hasFile('afbeelding')) {
+            $data['afbeelding'] = $request->file('afbeelding')->store('images', 'public');
+            $pizza->afbeelding = $data;
+            $pizza->save();
+        }
+
+        $pizza->update([
+            'naam' => $request->naam,
+            'prijs' => $request->prijs,
+        ]);
 
         if ($request->has('ingredients')) {
-            $pizza->ingredients()->sync($request->ingredients); 
+            $pizza->ingredients()->sync($request->ingredients);
         } else {
-            $pizza->ingredients()->detach(); 
+            $pizza->ingredients()->detach();
         }
 
         return redirect()->route('pizzamedewerker.index')->with('success', 'Pizza succesvol bijgewerkt!');

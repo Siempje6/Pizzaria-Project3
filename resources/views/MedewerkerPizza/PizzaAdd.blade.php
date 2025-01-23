@@ -254,7 +254,7 @@
     <div class="container mx-auto p-6">
     <h1 class="text-3xl font-bold mb-6 text-center">Nieuwe Pizza Toevoegen</h1>
 
-    <form action="{{ route('pizzamedewerker.store') }}" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-6">
+    <form action="{{ route('pizzamedewerker.store') }}" method="POST" enctype="multipart/form-data" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-6">
         @csrf
         <div class="mb-4">
             <label for="naam" class="block text-gray-700 font-bold mb-2">Naam</label>
@@ -266,8 +266,8 @@
         </div>
 
         <div class="mb-4">
-            <label for="afbeelding" class="block text-gray-700 font-bold mb-2">Afbeelding URL</label>
-            <input type="text" name="afbeelding" id="afbeelding"class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight">
+            <label for="afbeelding" class="block text-gray-700 font-bold mb-2">Afbeelding</label>
+            <input type="file" name="afbeelding" id="afbeelding"class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight" accept="afbeelding/*">
         </div>
 
         <label for="ingredients" class="block text-gray-700 font-bold mb-2">Ingrediënten:</label>

@@ -269,8 +269,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 pizza-card-container">
         @foreach($pizzas as $pizza)
             <div class="pizza-card">
-                <img src="{{ $pizza->afbeelding }}" alt="{{ $pizza->naam }}" class="pizza-img">
-
+                <img src="{{ $pizza->afbeelding ? asset('storage/' . $pizza->afbeelding) : asset('images/hawai.jpg') }}" alt="{{ $pizza->naam }}" class="pizza-image">
                 <div class="p-4">
                     <h3 class="text-xl">{{ $pizza->naam }}</h3>
 
