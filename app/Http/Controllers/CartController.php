@@ -3,16 +3,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Pizza;
-use App\Models\PizzaSize; // Zorg ervoor dat je het PizzaSize-model importeert
+use App\Models\PizzaSize; 
 
 class CartController extends Controller
 {
     public function viewCart()
     {
-        // Haal de cart op uit de sessie
         $cart = session()->get('cart', []);
 
-        // Voeg prijzen toe aan de items in de winkelwagen
         foreach ($cart as &$item) {
             $item['price'] = $this->calculatePrice($item['pizza'], $item['size']);
         }
@@ -24,7 +22,7 @@ class CartController extends Controller
     {
         $pizzaId = $request->input('pizza_id');
         $quantity = $request->input('quantity', 1);
-        $size = $request->input('size', 'medium'); // Standaard formaat is medium
+        $size = $request->input('size', 'medium');
 
         $pizza = Pizza::findOrFail($pizzaId);
 
@@ -87,7 +85,6 @@ class CartController extends Controller
                 }
             }
 
-            // Werk de prijs bij op basis van de grootte
             $item['price'] = $this->calculatePrice($item['pizza'], $item['size']);
         }
 
@@ -98,12 +95,10 @@ class CartController extends Controller
 
     private function calculatePrice($pizza, $size)
     {
-        // Zoek de prijs op uit de pizza_sizes tabel
         $pizzaSize = PizzaSize::where('pizza_id', $pizza->id)
             ->where('size', $size)
             ->first();
 
-        // Als de pizza-grootte niet wordt gevonden, geef dan een standaardprijs terug
         return $pizzaSize ? $pizzaSize->price : 0;
     }
 }

@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <style>
-        /* Zelfde stijlen als voor pizza's */
         header {
             background-color: #2d3748;
             color: white;
@@ -54,7 +53,6 @@
             100% { width: 100%; }
         }
 
-        /* Card styling */
         .user-card {
             transition: transform 0.3s, box-shadow 0.3s;
             background-color: white;

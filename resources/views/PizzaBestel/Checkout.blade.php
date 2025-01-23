@@ -4,7 +4,6 @@
 <div class="container mx-auto p-6">
     <h1 class="text-3xl font-semibold text-center mb-6">Afrekenen</h1>
 
-    <!-- Als er nog geen klantgegevens zijn, laat dan het formulier zien -->
     @if(!$klant)
     <form action="{{ route('checkout.createCustomer') }}" method="POST" class="bg-white shadow-md rounded-lg p-6 mb-6">
         @csrf
@@ -42,7 +41,6 @@
         </div>
     </form>
     @else
-    <!-- Klantgegevens Weergave -->
     <div class="bg-white shadow-md rounded-lg p-6 mb-6">
         <h2 class="text-2xl font-bold mb-4">Klantgegevens</h2>
         <p><strong>Naam:</strong> {{ $klant->naam }}</p>
@@ -51,7 +49,6 @@
         <p><strong>Telefoon:</strong> {{ $klant->telefoonnummer }}</p>
     </div>
 
-    <!-- Besteloverzicht -->
     <div class="bg-white shadow-md rounded-lg p-6 mb-6">
         <h2 class="text-2xl font-bold mb-4">Besteloverzicht</h2>
         <table class="table-auto w-full">
@@ -84,7 +81,6 @@
         </table>
     </div>
 
-    <!-- Bestelling Plaatsen -->
     <form action="{{ route('checkout.process') }}" method="POST" class="text-center">
         @csrf
         <input type="hidden" name="totalPrice" value="{{ $totalPrice }}">
