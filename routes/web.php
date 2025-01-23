@@ -28,11 +28,18 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/winkelwagen/toevoegen', [CartController::class, 'addToCart'])->name('cart.add');
     Route::post('/winkelwagen/update', [CartController::class, 'updateCart'])->name('cart.update');
     Route::post('/winkelwagen/verwijderen', [CartController::class, 'removeFromCart'])->name('cart.remove');
-
-    // Checkout routes
-    Route::get('/checkout', [CheckoutController::class, 'showCheckout'])->name('checkout');
-    Route::post('/checkout', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
 });
+
+Route::middleware('auth')->group(function () {
+    Route::post('/checkout', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
+    Route::get('/checkout', [CheckoutController::class, 'showCheckout'])->name('checkout');
+Route::post('/checkout/customer', [CheckoutController::class, 'createCustomer'])->name('checkout.createCustomer');
+
+});
+
+Route::get('/order/confirmation/{orderId}', [CheckoutController::class, 'confirmation'])->name('order.confirmation');
+
+
 
 // Routes voor superadmins
 Route::middleware(['auth', 'role:superadmin'])->group(function () {
@@ -66,3 +73,5 @@ Route::get('/test-cart', function () {
 Route::get('/', function () {
     return view('index');  // Dit kan de view zijn die je wilt tonen bij het bezoeken van de homepagina
 })->name('home');
+
+
