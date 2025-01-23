@@ -14,6 +14,8 @@ use App\Http\Controllers\BestellingController;
 // Zorg ervoor dat authenticatie-routes zijn geregistreerd (bijvoorbeeld via Laravel Breeze of Laravel UI).
 require __DIR__.'/auth.php';
 
+Route::resource('bestellingen', BestellingController::class)->only(['index', 'update']);
+
 // Dashboard route voor ingelogde gebruikers
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -56,13 +58,11 @@ Route::middleware(['auth', 'role:superadmin'])->group(function () {
 Route::middleware(['auth', 'role:admin|superadmin'])->group(function () {
     Route::resource('pizzamedewerker', MakePizzaController::class)->only(['index', 'show', 'edit', 'update', 'create', 'store', 'destroy']);
     Route::resource('ingredienten', MakeIngredientController::class)->only(['index', 'show', 'edit', 'update', 'create', 'store', 'destroy']);
-    Route::resource('bestellingen', BestellingController::class)->only(['index', 'show', 'edit', 'update']);
 });
 
 // Publieke routes
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 Route::resource('pizzas', PizzaController::class)->only(['index', 'show']);
-Route::resource('bestellingen', BestellingController::class)->only(['index', 'show']);
 
 // Testroute voor winkelwagen
 

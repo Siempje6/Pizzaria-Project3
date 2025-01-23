@@ -46,12 +46,14 @@ class MakePizzaController extends Controller
         ]);
 
         if ($request->hasFile('afbeelding')) {
-            $request->file('afbeelding')->store('images', 'public'); 
-        }
+            $filename = $request->file('afbeelding')->store('images', 'public');
+        } 
+
 
         $pizza = Pizza::create([
             'naam' => $request->naam,
             'prijs' => $request->prijs,
+            'afbeelding' => $filename
         ]);
 
         if ($request->has('ingredients')) {
@@ -77,7 +79,7 @@ class MakePizzaController extends Controller
         $request->validate([
             'naam' => 'required|string|max:255',
             'prijs' => 'required|numeric',
-            'afbeelding' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
+            'afbeelding' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'ingredients' => 'nullable|array',
             'ingredients.*' => 'exists:ingrediënts,id',
         ]);
@@ -93,6 +95,7 @@ class MakePizzaController extends Controller
         $pizza->update([
             'naam' => $request->naam,
             'prijs' => $request->prijs,
+            'afbeelding' => $data
         ]);
 
         if ($request->has('ingredients')) {

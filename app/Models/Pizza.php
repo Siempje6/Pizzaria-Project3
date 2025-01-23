@@ -15,7 +15,7 @@ class Pizza extends Model
     protected $fillable = [
         'naam',
         'prijs',
-        'afbeeldingen',
+        'afbeelding',
     ];
 
     protected static function booted()

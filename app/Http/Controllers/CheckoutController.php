@@ -16,21 +16,15 @@ class CheckoutController extends Controller
      */
     public function showCheckout()
     {
-        $cart = session()->get('cart', []); // Haal winkelwagentje op uit sessie
-        $user = Auth::user(); // Haal ingelogde gebruiker op
+        $cart = session()->get('cart', []); 
+        $user = Auth::user(); 
 
-        // Als het winkelwagentje leeg is, stuur door naar winkelwagenpagina
         if (empty($cart)) {
             return redirect()->route('cart.view')->with('error', 'Je winkelwagen is leeg.');
         }
 
-        // Haal klantgegevens op op basis van emailadres van de ingelogde gebruiker
         $klant = Klant::where('emailadres', $user->email)->first();
-
-        // Bereken de totaalprijs van de items in de winkelwagen
         $totalPrice = array_reduce($cart, fn($total, $item) => $total + ($item['quantity'] * $item['price']), 0);
-
-        // Geef de checkoutpagina weer met de winkelwagenitems, klantinformatie en totaalprijs
         return view('PizzaBestel.Checkout', compact('cart', 'klant', 'totalPrice'));
     }
 
@@ -87,32 +81,22 @@ class CheckoutController extends Controller
                 'pizza_id' => $item['pizza']->id, // Haal pizza ID uit het winkelwagentje
                 'aantal' => $item['quantity'], // Aantal van de pizza
                 'afmeting' => $this->getAfmetingEnumValue($item['size']), // Haal enum waarde voor grootte
-                'regelprijs' => $item['quantity'] * $item['price'], // Totaalprijs per regel
+                'regelprijs' => $item['quantity'] * $item['price'], 
             ]);
         }
 
-        // Verwijder het winkelwagentje uit de sessie na de bestelling
         session()->forget('cart');
 
-        // Redirect naar de orderbevestigingspagina
         return redirect()->route('order.confirmation', ['orderId' => $bestelling->id]);
     }
 
-    /**
-     * Bevestig de bestelling na checkout
-     */
     public function confirmation($orderId)
     {
-        // Haal de bestelling op op basis van het orderID
         $bestelling = Bestelling::with('bestelregels.pizza')->findOrFail($orderId);
 
-        // Geef de bevestigingspagina weer met de bestelling
         return view('order.confirmation', compact('bestelling'));
     }
 
-    /**
-     * Haal de juiste enum waarde voor de afmeting
-     */
     private function getAfmetingEnumValue($size)
     {
         switch (strtolower($size)) {
@@ -123,7 +107,7 @@ class CheckoutController extends Controller
             case 'groot':
                 return 'Groot';
             default:
-                return null; // Of een andere fallback, afhankelijk van je businesslogica
+                return null;
         }
     }
 }
