@@ -62,3 +62,7 @@ Route::get('/test-cart', function () {
     session()->put('cart', $cart);
     return redirect()->route('cart.view');
 });
+
+Route::get('/', function () {
+    return view('index');  // Dit kan de view zijn die je wilt tonen bij het bezoeken van de homepagina
+})->name('home');

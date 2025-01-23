@@ -4,14 +4,43 @@
 <div class="container mx-auto p-6">
     <h1 class="text-3xl font-semibold text-center mb-6">Afrekenen</h1>
 
-    <div class="bg-white shadow-md rounded-lg p-6 mb-6">
-        <h2 class="text-2xl font-bold mb-4">Klantgegevens</h2>
-        <p><strong>Naam:</strong> {{ $klant->naam }}</p>
-        <p><strong>Email:</strong> {{ $klant->emailadres }}</p>
-        <p><strong>Adres:</strong> {{ $klant->adres }}, {{ $klant->woonplaats }}</p>
-        <p><strong>Telefoon:</strong> {{ $klant->telefoonnummer }}</p>
+    <!-- Klantgegevens Formulier -->
+    <form method="POST" class="bg-white shadow-md rounded-lg p-6 mb-6">
+    @csrf
+
+    <h2 class="text-2xl font-bold mb-4">Klantgegevens</h2>
+
+    <div class="mb-4">
+        <label for="naam" class="block text-sm font-medium text-gray-700">Naam</label>
+        <input type="text" id="naam" name="naam" value="{{ Auth::user()->name }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
     </div>
 
+    <div class="mb-4">
+        <label for="emailadres" class="block text-sm font-medium text-gray-700">Email</label>
+        <input type="email" id="emailadres" name="emailadres" value="{{ Auth::user()->email }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+    </div>
+
+    <div class="mb-4">
+        <label for="adres" class="block text-sm font-medium text-gray-700">Adres</label>
+        <input type="text" id="adres" name="adres" value="" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+    </div>
+
+    <div class="mb-4">
+        <label for="woonplaats" class="block text-sm font-medium text-gray-700">Woonplaats</label>
+        <input type="text" id="woonplaats" name="woonplaats" value="" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+    </div>
+
+    <div class="mb-4">
+        <label for="telefoonnummer" class="block text-sm font-medium text-gray-700">Telefoon</label>
+        <input type="tel" id="telefoonnummer" name="telefoonnummer" value="" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+    </div>
+
+    <div class="flex justify-end">
+        <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Opslaan</button>
+    </div>
+    </form>
+
+    <!-- Besteloverzicht -->
     <div class="bg-white shadow-md rounded-lg p-6 mb-6">
         <h2 class="text-2xl font-bold mb-4">Besteloverzicht</h2>
         <table class="table-auto w-full">
@@ -44,6 +73,7 @@
         </table>
     </div>
 
+    <!-- Bestelling Plaatsen -->
     <form action="{{ route('checkout.process') }}" method="POST" class="text-center">
         @csrf
         <input type="hidden" name="totalPrice" value="{{ $totalPrice }}">
